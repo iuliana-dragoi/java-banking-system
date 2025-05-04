@@ -48,6 +48,7 @@ public class Main3 {
         for (int i = 0; i < numberOfAccounts; i++) {
             Account account = bank.createAccount(new BigDecimal("1000")); // initial balance
             accounts.add(account);
+            //todo create accounts using threads in parallel.
         }
 
         // Step 2: Submit 10 transactions per account
