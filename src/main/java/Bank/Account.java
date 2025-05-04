@@ -1,7 +1,6 @@
 package main.java.Bank;
 
 import main.java.Operations.Transaction;
-
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;

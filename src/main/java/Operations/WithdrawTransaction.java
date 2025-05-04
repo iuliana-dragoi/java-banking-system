@@ -1,8 +1,6 @@
 package main.java.Operations;
 
 import main.java.Bank.Account;
-import main.java.Exceptions.InsufficientFundsException;
-
 import java.math.BigDecimal;
 
 public class WithdrawTransaction implements Transaction {
@@ -29,7 +27,7 @@ public class WithdrawTransaction implements Transaction {
             if(debug) System.out.println("Amount withdrawn: " + amount.toPlainString() + " from account: " + account.getAccountNumber() + ". Current balance: " + account.getBalance().toPlainString());
         }
         else {
-            if(debug) System.out.println("Insufficient funds!");
+            if(debug) System.out.println("Insufficient funds for withdraw from Account " + account.getAccountNumber());
         }
     }
 }

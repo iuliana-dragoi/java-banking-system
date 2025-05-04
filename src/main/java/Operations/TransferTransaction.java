@@ -1,7 +1,6 @@
 package main.java.Operations;
 
 import main.java.Bank.Account;
-
 import java.math.BigDecimal;
 
 public class TransferTransaction implements Transaction {
@@ -26,13 +25,14 @@ public class TransferTransaction implements Transaction {
         first.lock();
         second.lock();
         try {
-            if(first.getBalance().compareTo(amount) >= 0) {
-                first.setBalance(first.getBalance().subtract(amount));
+            if(from.getBalance().compareTo(amount) >= 0) {
+                from.setBalance(from.getBalance().subtract(amount));
                 second.setBalance(to.getBalance().add(amount));
-                if(debug) System.out.println("Transferred " + amount.toPlainString() + " from Account " + first.getAccountNumber() + " to Account " + second.getAccountNumber());
+                if(debug) System.out.println("Transferred " + amount.toPlainString() + " from Account " + from.getAccountNumber() + " to Account " + to.getAccountNumber());
             }
             else {
-                if(debug) System.out.println("Insufficient funds for transfer from Account " + first.getAccountNumber());
+                if(debug) System.out.println("Insufficient funds for transfer from Account " + from.getAccountNumber());
+//                throw new InsufficientFundsException("Insufficient funds for transfer from Account \" + from.getAccountNumber()");
             }
         }
         finally {
