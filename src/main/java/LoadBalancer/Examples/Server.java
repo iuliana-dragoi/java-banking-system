@@ -1,4 +1,4 @@
-package main.java.LoadBalancer.Tests;
+package main.java.LoadBalancer.Examples;
 
 import java.io.*;
 import java.net.ServerSocket;
