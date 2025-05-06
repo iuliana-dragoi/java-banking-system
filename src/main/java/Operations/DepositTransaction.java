@@ -19,6 +19,6 @@ public class DepositTransaction implements Transaction {
     public void process() {
         BigDecimal result = account.getBalance().add(amount);
         account.setBalance(result);
-        if(debug) System.out.println("Amount deposited: " + amount.toPlainString() + " in account: " + account.getAccountNumber() + ". Current balance: " + account.getBalance().toPlainString());
+        if(debug) System.out.println(Thread.currentThread().getName() + " Amount deposited: " + amount.toPlainString() + " in account: " + account.getAccountNumber() + ". Current balance: " + account.getBalance().toPlainString());
     }
 }

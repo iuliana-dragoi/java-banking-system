@@ -25,6 +25,7 @@ public class Server1 extends AbstractServer {
             String response = "Processed by Backend Server 8081: " + message;
             outputStream.writeObject(response);
             outputStream.flush();
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

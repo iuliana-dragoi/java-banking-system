@@ -24,7 +24,7 @@ public class WithdrawTransaction implements Transaction {
             // a.compareTo(b) < 0 → a is less than b
             BigDecimal result = currentBalance.subtract(amount);
             account.setBalance(result);
-            if(debug) System.out.println("Amount withdrawn: " + amount.toPlainString() + " from account: " + account.getAccountNumber() + ". Current balance: " + account.getBalance().toPlainString());
+            if(debug) System.out.println(Thread.currentThread().getName() + " Amount withdrawn: " + amount.toPlainString() + " from account: " + account.getAccountNumber() + ". Current balance: " + account.getBalance().toPlainString());
         }
         else {
             if(debug) System.out.println("Insufficient funds for withdraw from Account " + account.getAccountNumber());

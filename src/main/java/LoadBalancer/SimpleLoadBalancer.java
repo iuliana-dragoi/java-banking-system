@@ -1,19 +1,21 @@
 package main.java.LoadBalancer;
 
+import main.java.LoadBalancer.Clients.RequestType;
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SimpleLoadBalancer {
 
-    private static final List<String> backendServers = Arrays.asList("localhost", "localhost");
+    private static final Map<RequestType, InetSocketAddress> routingTable = new HashMap<>();
 
-    private static final int[] backendPorts = {8081, 8082};
-
-    private static final AtomicInteger counter = new AtomicInteger(0);
+    static {
+        routingTable.put(RequestType.CHECK_BALANCE, new InetSocketAddress("localhost", 8081));
+        routingTable.put(RequestType.DEPOSIT, new InetSocketAddress("localhost", 8082));
+    }
 
     public static void main(String[] args) throws IOException {
         new SimpleLoadBalancer().start();
@@ -30,32 +32,38 @@ public class SimpleLoadBalancer {
     }
 
     private void handleClient(Socket clientSocket) {
-        try (
+
+        try {
+            // Get message from Client
             ObjectInputStream inputStream = new ObjectInputStream(clientSocket.getInputStream());
-            ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream())
-        ) {
-            String message = (String) inputStream.readObject();
-            System.out.println("Load Balancer received: " + message);
+            RequestType requestType = (RequestType) inputStream.readObject();
+            System.out.println("Load Balancer received: " + requestType);
 
-            int backendIndex = counter.getAndIncrement() % backendServers.size();
-            String backendServer = backendServers.get(backendIndex);
-            int backendPort = backendPorts[backendIndex];
+            // Select server by request type
+            InetSocketAddress targetServer = routingTable.get(requestType);
 
-            try (
-                Socket backendSocket = new Socket(backendServer, backendPort);
-                ObjectOutputStream backendOut = new ObjectOutputStream(backendSocket.getOutputStream());
-                ObjectInputStream backendIn = new ObjectInputStream(backendSocket.getInputStream())
-            ) {
-                backendOut.writeObject(message);
-                backendOut.flush();
+            // Send to selected server
+            String response = sendToBackend(targetServer.getHostName(), targetServer.getPort(), requestType.name());
 
-                String backendResponse = (String) backendIn.readObject();
-                outputStream.writeObject(backendResponse);
-                outputStream.flush();
-            }
-
-        } catch (IOException | ClassNotFoundException e) {
+            // Send message to Client
+            ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+            outputStream.writeObject(response);
+            outputStream.flush();
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private static String sendToBackend(String backendServer, int port, String message) throws IOException, ClassNotFoundException {
+        Socket backendSocket = new Socket(backendServer, port);
+        ObjectOutputStream outputStream = new ObjectOutputStream(backendSocket.getOutputStream());
+        outputStream.writeObject(message);
+        outputStream.flush();
+
+        ObjectInputStream inputStream = new ObjectInputStream(backendSocket.getInputStream());
+        return (String) inputStream.readObject();
+    }
+
+
 }

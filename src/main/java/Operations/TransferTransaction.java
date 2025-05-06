@@ -28,7 +28,7 @@ public class TransferTransaction implements Transaction {
             if(from.getBalance().compareTo(amount) >= 0) {
                 from.setBalance(from.getBalance().subtract(amount));
                 second.setBalance(to.getBalance().add(amount));
-                if(debug) System.out.println("Transferred " + amount.toPlainString() + " from Account " + from.getAccountNumber() + " to Account " + to.getAccountNumber());
+                if(debug) System.out.println(Thread.currentThread().getName() + " Transferred " + amount.toPlainString() + " from Account " + from.getAccountNumber() + " to Account " + to.getAccountNumber());
             }
             else {
                 if(debug) System.out.println("Insufficient funds for transfer from Account " + from.getAccountNumber());

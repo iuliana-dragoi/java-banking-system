@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class Main2 {
 
     public static void main(String[] args) {
-        Bank bank = new Bank(32);
+        Bank bank = new Bank(2);
         Account account1 = bank.createAccount(new BigDecimal("100"));
         Account account2 = bank.createAccount(new BigDecimal("520"));
 
@@ -30,7 +30,7 @@ public class Main2 {
 
         account2.submitTransaction(bank.deposit(account2, new BigDecimal("900")));
         account2.submitTransaction(bank.deposit(account2, new BigDecimal("50")));
-        account2.submitTransaction(bank.withdraw(account2, new BigDecimal("100050")));
+        account2.submitTransaction(bank.withdraw(account2, new BigDecimal("100")));
 
         Transaction transfer = new TransferTransaction(account1, account2, new BigDecimal("100"));
         account1.submitTransaction(transfer);

@@ -4,5 +4,5 @@ public interface Transaction {
 
     void process();
 
-    boolean debug = false;
+    boolean debug = true;
 }
